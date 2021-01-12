@@ -4,6 +4,19 @@ from django.utils import timezone
 
 # Create your models here.
 
+class Participant (models.Model):
+    REG_TYPE = (
+        ('Individual','Individual'),
+        ('Group','Group'),
+    )
+    Name = models.CharField(max_length=64)
+    Contact = models.IntegerField()
+    Email = models.EmailField()
+    Event = models.CharField(max_length = 32)
+    RegType = models.CharField(max_length=32, default='Individual', choices=REG_TYPE)
+    Number = models.IntegerField()
+
+
 class Event (models.Model):
     EventName = models.CharField(max_length = 32)
     Desc = models.TextField(blank = True, max_length = 50)
@@ -20,3 +33,5 @@ class Event (models.Model):
 
     def __str__ (self):
         return self.EventName
+
+
