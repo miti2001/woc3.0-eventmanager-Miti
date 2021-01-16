@@ -22,7 +22,7 @@ def eventReg(request):
             return HttpResponse('Saved')
 
 def participantReg(request):
-    content = Event.objects.all().values_list(
+    content = Event.objects.all().order_by('RegEndDate').values(
         'EventName', 'Desc', 'Loc', 'FromDate', 'ToDate', 'RegEndDate',
     )
     

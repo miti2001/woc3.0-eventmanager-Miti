@@ -9,10 +9,12 @@
   {% for row in content %}
   <tr>
     <td>
-    {% for key in row %}
     
-      {{ key }}
+    {% for key,value in row.items %}
+    
+      {{ key }} : {{value}}
       <br>
+    
     {% endfor %}
     </td>
   </tr>
