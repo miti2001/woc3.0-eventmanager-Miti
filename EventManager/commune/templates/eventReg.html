@@ -1,12 +1,36 @@
-{% extends 'base.html' %}
+{% extends 'base.html' %} 
 {% load crispy_forms_tags %}
 {% crispy form %}
+{% load widget_tweaks %}
+
 {% block content %}
+<center>
+<h3>Register your Event</h3>
+</center>
+
 
 <form method="POST">
-    {% csrf_token %}
-    {{ form | crispy }}
-    <button type="submit">Submit</button>
+    <div class="row">
+        <div class="col">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <button type="submit">Submit</button>
+        </div>
+    </div>
 </form>
+</div>
+
+<!--
+<form method="POST">
+    <div class="form-group">
+      <label for="email">Event Name:</label>
+      {% render_field form.EventName class="input" placeholder="Event Name"%}
+      <input type="email" class="form-control" placeholder="Enter email" id="email">
+    </div>
+    <div class="form-group">
+      <label for="pwd">Password:</label>
+      <input type="password" class="form-control" placeholder="Enter password" id="pwd">
+    </div>
+-->
 
 {% endblock %}

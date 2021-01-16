@@ -1,0 +1,16 @@
+{% extends 'base.html' %}
+{% load crispy_forms_tags %}
+{% crispy form %}
+{% block content %}
+
+<form>
+    <label for="HostEmail">Host email address: </label>
+    <input id="HostEmail" type="email">
+    <br>
+    <label for="HostPassword">Password:</label>
+    <input id="HostEmail" type="password">
+    <br>
+    <input type="submit">
+</form>
+
+{% endblock %}

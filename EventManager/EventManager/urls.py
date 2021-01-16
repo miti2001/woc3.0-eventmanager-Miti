@@ -22,5 +22,6 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('',views.home),
     url('eventReg',views.eventReg),
-    url('participantReg',views.participantReg)
+    url('participantReg',views.participantReg),
+    url('host',views.host)
 ]

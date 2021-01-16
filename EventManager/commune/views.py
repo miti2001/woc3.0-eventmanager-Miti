@@ -38,3 +38,22 @@ def participantReg(request):
         if form.is_valid():
             form.save()
             return HttpResponse('Saved')
+
+def host(request):
+    return HttpResponse('Saved')
+"""
+    content = Participant.objects.all().values_list()
+    
+    if request.method == 'GET':
+        return render(request, 'host.html', {
+            'content':content,
+            'form':form,
+    })
+
+    if request.method == 'POST':
+        form = ParticipantForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return HttpResponse('Saved')
+    return render(request, 'host.html')
+"""    
