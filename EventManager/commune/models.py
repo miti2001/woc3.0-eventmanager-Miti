@@ -9,16 +9,20 @@ class Participant (models.Model):
         ('Individual','Individual'),
         ('Group','Group'),
     )
-    Name = models.CharField(max_length=64)
-    Contact = models.IntegerField()
+    Name = models.CharField(max_length=50)
+    Contact = models.PositiveIntegerField()
     Email = models.EmailField()
-    Event = models.CharField(max_length = 32)
+    EventReg = models.CharField(max_length = 50)
     RegType = models.CharField(max_length=32, default='Individual', choices=REG_TYPE)
-    Number = models.IntegerField()
+    Number = models.IntegerField(default = 1)
+
+    def __str__ (self):
+        return self.Name
 
 
 class Event (models.Model):
-    EventName = models.CharField(max_length = 32)
+    
+    EventName = models.CharField(max_length = 50)
     Desc = models.TextField(blank = True, max_length = 50)
     Loc = models.CharField(max_length = 32)
     FromDate = models.DateField(default = datetime.date.today)

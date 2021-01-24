@@ -3,14 +3,18 @@
 {% crispy form %}
 {% block content %}
 
-<form>
-    <label for="HostEmail">Host email address: </label>
-    <input id="HostEmail" type="email">
+
+<form method="POST" action="">
+    {% csrf_token %}
+    <label for="eventid">Event ID: </label>
+    <input id="eventid" name="eventid" type="integer">
     <br>
-    <label for="HostPassword">Password:</label>
-    <input id="HostEmail" type="password">
+    <label for="eventpassword">Password:</label>
+    <input id="eventpassword" name="eventpassword" type="password">
     <br>
     <input type="submit">
 </form>
+
+{{ part }}
 
 {% endblock %}
