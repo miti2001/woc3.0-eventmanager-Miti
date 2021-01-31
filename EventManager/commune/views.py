@@ -80,14 +80,14 @@ def participantReg(request):
         else:
             form.save()
             
-            account_sid =''
-            auth_token =''
+            account_sid ='ACa828eeca8f45c4c1925d19b55e04c1a1'
+            auth_token ='9619835ca235f95a605e6243b7ae6919'
             client = Client(account_sid, auth_token)
 
             message = client.messages \
                             .create(
                                 body='Hello '+ name +',\nYour participation for '+event+' is confirmed.',
-                                from_='',
+                                from_='+12817092069',
                                 to='+91'+ str(contact),
                             )
            
@@ -111,6 +111,17 @@ def eventReg(request):
         form = EventForm(request.POST)
         if form.is_valid():
             form.save()
+            
+            mail = request.POST['HostEmail']
+            name = request.POST['EventName']
+
+            send_mail(
+                'Successful Event Registration',
+                'Hey there! your event has been successfully registered.',
+                '',
+                [mail],
+                fail_silently=False,
+            )
             return HttpResponse('Saved')
         
    
