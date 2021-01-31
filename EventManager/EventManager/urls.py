@@ -20,8 +20,8 @@ from commune import views
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('',views.home),
+    path('',views.home, name="home"),
     url('eventReg',views.eventReg),
-    url('participantReg',views.participantReg),
-    url('host',views.host)
+    url('participantReg',views.participantReg, name=""),
+    url('host',views.host, name="host"),
 ]

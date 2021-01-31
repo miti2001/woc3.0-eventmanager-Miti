@@ -1,10 +1,15 @@
 from django.shortcuts import render,HttpResponse,redirect
+from django.urls import reverse
+from django.http import HttpResponseRedirect
+from django.contrib import messages
 from django import forms
 from .forms import EventForm,ParticipantForm
 from .models import Event,Participant
+from django.core.exceptions import ValidationError
 from django.core.mail import send_mail
+import os
+from twilio.rest import Client
 import datetime
-
 
 # Create your views here.
 
@@ -18,31 +23,75 @@ def host(request):
     else:
         eventid = request.POST['eventid']
         eventpass = request.POST['eventpassword']
-        content = Event.objects.filter(id = eventid, HostPassword = eventpass).values('EventName')
-        print(content)
+        part = None
 
-        value = content|
-        print(value)
+        d = Event.objects.values_list('id')
+        tempid = (int(eventid),)
+        temppass = (eventpass,)
         
-        key = value['EventName']
+        if(tempid in d):
+            content1 = Event.objects.get(id = eventid)
+            pass1 = Event.objects.filter(id = eventid).values_list('HostPassword')
+           
+            if temppass != pass1[0]:
+                    messages.error(request,'Wrong password')
+                    return redirect('host')
+
+            else:
+                part = Participant.objects.filter(EventReg = content1).values_list(
+                    'id','Name', 'Contact', 'Email', 'RegType','Number',
+                )
+
+                if(not part):
+                    messages.error(request,'No participant has registered for the event')
+                    return redirect('host')
+        else:
+            messages.error(request,'This event id is not registered')
+
+        context = {
+            "content" : part
+        }   
+    
+        return render(request, 'host.html', context) 
         
-        part = Participant.objects.filter(EventReg = str(key)).values_list()
-        print(part)
-        
-        return render(request, 'host.html', {
-            part : 'part',
-        }) 
 
 def participantReg(request):
     content = Event.objects.filter(RegEndDate__gte = datetime.date.today()).order_by('RegEndDate').values(
-        'id','EventName', 'Desc', 'Loc', 'FromDate', 'ToDate', 'RegEndDate',
+        'id', 'EventName', 'Desc', 'Loc', 'FromDate', 'ToDate', 'RegEndDate',
     )
 
     form = ParticipantForm(request.POST)
 
     if form.is_valid():
-        form.save()
-        return HttpResponse('Saved')
+
+        contact = request.POST['Contact']
+        name = request.POST['Name']
+        mail = request.POST['Email']
+        event = request.POST['EventReg']
+        data = Participant.objects.values_list('Email')
+        event1 = Participant.objects.filter(Email = mail).values_list('EventReg')
+
+        temp_mail = (mail,)
+        temp_event = (event,)
+
+        if(temp_mail in data and temp_event in event1):
+            messages.error(request,'You have already registered in this event under the given email id')
+        
+        else:
+            form.save()
+            
+            account_sid =''
+            auth_token =''
+            client = Client(account_sid, auth_token)
+
+            message = client.messages \
+                            .create(
+                                body='Hello '+ name +',\nYour participation for '+event+' is confirmed.',
+                                from_='',
+                                to='+91'+ str(contact),
+                            )
+           
+            return redirect("")
         
     return render(request, 'participantReg.html', {
         'form':form,
@@ -60,34 +109,10 @@ def eventReg(request):
 
     if request.method == 'POST':
         form = EventForm(request.POST)
-        
-    
         if form.is_valid():
             form.save()
-            name = request.POST['EventName']
-            """
-            content = Event.objects.filter(EventName = name).values('pk')
-            print(content)
-            var = content.pop()
-            print(var)
-            iden = var.get('pk')
-            print(iden)
-            #send mail
-
-            send_mail(
-                'Event successfully registered', # subject
-                'Thank you for registering your event with us.'+
-                'You have successfully registered your event'+ name +'at commune.'
-                'The event id is'+ str(iden) + 'and event password is:'+ (request.POST['HostPassword'])
-                +'The event is scheduled from '+ (request.POST['FromDate'])+ (request.POST['FromTime'])+ 
-                'to' + (request.POST['ToDate'])+ (request.POST['ToTime'])+
-                'You can review the participation for your event at our Commune portal.', # message
-                ['mitipurohit27@gmail.com'], # From email
-                ['mail'], # To email
-            )
-            
-            """
             return HttpResponse('Saved')
+        
    
 def home(request):
     return render(request,'home.html')

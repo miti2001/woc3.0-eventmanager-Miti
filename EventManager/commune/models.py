@@ -1,6 +1,8 @@
 from django.db import models
 import datetime
 from django.utils import timezone
+import os
+from twilio.rest import Client
 
 # Create your models here.
 
@@ -19,12 +21,19 @@ class Participant (models.Model):
     def __str__ (self):
         return self.Name
 
-
 class Event (models.Model):
+    EVENT_CATEGORY = (
+        ('Seminar','Seminar'),
+        ('Workshop','Workshop'),
+        ('Festival','Festival'),
+        ('Competition','Competition'),
+        ('Other','Other'),
+    )
     
     EventName = models.CharField(max_length = 50)
     Desc = models.TextField(blank = True, max_length = 50)
     Loc = models.CharField(max_length = 32)
+    Category = models.CharField(max_length=32, default='Other', choices=EVENT_CATEGORY)
     FromDate = models.DateField(default = datetime.date.today)
     FromTime = models.TimeField(default = timezone.now)
     ToDate = models.DateField(default = datetime.date.today)
@@ -33,7 +42,8 @@ class Event (models.Model):
     RegEndTime = models.TimeField(default = timezone.now)
     HostEmail = models.EmailField(max_length = 254)
     HostPassword = models.CharField(max_length = 32)
-    Status = models.IntegerField()
+    Poster = models.URLField(max_length = 200,blank=True)
+    
 
     def __str__ (self):
         return self.EventName

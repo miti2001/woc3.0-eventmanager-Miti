@@ -6,15 +6,70 @@
 
 <form method="POST" action="">
     {% csrf_token %}
-    <label for="eventid">Event ID: </label>
-    <input id="eventid" name="eventid" type="integer">
-    <br>
-    <label for="eventpassword">Password:</label>
-    <input id="eventpassword" name="eventpassword" type="password">
-    <br>
-    <input type="submit">
+    <div class="form-group">
+      <label for="eventid" class="control-label col-sm-2">Event ID: </label>
+      <div class="col-sm-4">
+        <input id="eventid" name="eventid" type="integer" class="form-control">
+      </div>
+    </div>
+  
+    <div class="form-group">
+      <label for="eventid" class="control-label col-sm-2">Password: </label>
+      <div class="col-sm-4">
+        <input id="eventpassword" name="eventpassword" type="password" class="form-control">
+      </div>
+    </div>
+
+    <div class="form-group">
+    <button type="submit">
+      Submit
+    </button>
+    </div>
+    
 </form>
+{% if  messages %}
+  {% for message in messages %}
+    <div class="alert alert-danger" role="alert">
+      {{message}}
+    </div>
+  {% endfor %}
+{% endif %}
+<table class="table table-light" id="participantTable" >
+    <tr>
+        <td>Participant ID</td>
+        <td>Name</td>
+        <td>Contact Number</td>
+        <td>Email</td>
+        <td>Participation Type</td>
+        <td>No. of people</td>
 
-{{ part }}
+    </tr>
+    {% for row in content %}
+    <tr>
+      {% for key in row %}
+      <td>
+        {{ key }} 
+     </td>
+      {% endfor %}
+     
+    </tr>
+    {% endfor %}
+  </table>
 
+  <script>
+    function tableview()
+    {
+      
+      var x = document.getElementById("participantTable");
+      
+      if (x.style.display === "none") {
+        x.style.display = "block";
+      } 
+      else {
+        x.style.display = "none";
+      }
+  
+    }
+  </script>
+  
 {% endblock %}
