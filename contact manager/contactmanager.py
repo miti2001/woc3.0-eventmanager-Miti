@@ -10,7 +10,7 @@ print('Actions')
 print("1. Make new contact")
 print("2. Add to existing contact")
 print('3. Search a contact')
-print('4.Delete a content')
+print('4. Delete a content')
 
 contactList = []
 contactList.sort()

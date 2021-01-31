@@ -80,14 +80,14 @@ def participantReg(request):
         else:
             form.save()
             
-            account_sid ='ACa828eeca8f45c4c1925d19b55e04c1a1'
-            auth_token ='9619835ca235f95a605e6243b7ae6919'
+            account_sid =''
+            auth_token =''
             client = Client(account_sid, auth_token)
 
             message = client.messages \
                             .create(
                                 body='Hello '+ name +',\nYour participation for '+event+' is confirmed.',
-                                from_='+12817092069',
+                                from_='',
                                 to='+91'+ str(contact),
                             )
            
